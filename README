@@ -12,13 +12,7 @@ To install this module type the following:
    make test
    make install
 
-DEPENDENCIES
-
-WWW::Search
-
 COPYRIGHT AND LICENCE
 
-Released under The Artistic License
-
-Copyright (C) 2002 xern <xern@cpan.org>
+Copyright (C) 2002 xern <xern@cpan.org>, released under The Artistic License
 

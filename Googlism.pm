@@ -5,7 +5,7 @@ use strict;
 use warnings;
 require Exporter;
 our @ISA = qw(WWW::Search Exporter);
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use Carp;
 use WWW::Search qw/generic_option/;
 require WWW::SearchResult;
@@ -58,13 +58,11 @@ sub native_retrieve_some {
     my($response) = $self->http_request('GET', $self->{_next_url});
     $self->{response} = $response;
     $response->{_content} =~ m!<br><h1><span class="suffix">Googlism for:</span> .+?</h1><br>(.+)<br>\n!s;
-    my ($hit, $hits_found);
     for my $r (split /<br>\n/, $1){
-	$hit = new WWW::SearchResult;
-	$hits_found++;
-	$hit->title($r);
-	push @{$self->{cache}}, $hit;
+	$self->{_num_hits}++;
+	push @{$self->{cache}}, $r;
     }
+
     undef $self->{_next_url};
 }
 
@@ -83,14 +81,15 @@ WWW::Search::Googlism - Searching Googlism
   $search = new WWW::Search('Googlism');
   $search->native_query(WWW::Search::escape_query($query), { type => 'who' });
   while (my $result = $search->next_result()) {
-      $title = $result->title;
-      print "<a href=$url>$title</a>\n";
+      print "$result\n";
   }
 
 
 =head1 DESCRIPTION
 
 WWW::Search::Googlism is a subclass of WWW::Search. Users can use this module to search http://www.googlism.com/.
+
+See also L<bin/googlism.pl> distributed with this module.
 
 =head1 TYPES
 
@@ -106,6 +105,6 @@ Released under The Artistic License
 
 =head1 SEE ALSO
 
-B<WWW::Search>
+L<WWW::Search>, L<bin/googlism.pl>
 
 =cut
